@@ -14,7 +14,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1124, #2b1c44);
+            background: radial-gradient(circle, rgba(180, 0, 255, 0.2) 10%, rgba(26, 17, 36, 0.9) 90%);
             color: white;
             display: flex;
             height: 100vh;
@@ -30,6 +30,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            border-right: 2px solid #b400ff;
         }
 
         .sidebar h2 {
@@ -56,6 +57,7 @@
             transition: 0.3s;
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
         }
 
         .sidebar ul li a:hover, .sidebar ul li a.active {
@@ -131,50 +133,6 @@
             box-shadow: 0px 0px 10px rgba(180, 0, 255, 0.5);
         }
 
-        /* Login / Registrierungsformular */
-        .login-container {
-            background: rgba(26, 17, 36, 0.95);
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            width: 350px;
-            margin: auto;
-            margin-top: 10%;
-            box-shadow: 0px 0px 20px rgba(180, 0, 255, 0.5);
-        }
-
-        input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            background: #2b1c44;
-            color: white;
-        }
-
-        button {
-            background: #b400ff;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-            border: none;
-            color: white;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #9c00e6;
-        }
-
-        .link {
-            margin-top: 10px;
-            color: #b400ff;
-            cursor: pointer;
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -192,19 +150,8 @@
         <button class="logout-button" onclick="logout()">Logout</button>
     </div>
 
-    <!-- Login/Register -->
-    <div id="auth-container" class="content">
-        <div class="login-container">
-            <h2 id="form-title">Login</h2>
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button onclick="submitForm()">Login</button>
-            <p class="link" onclick="toggleForm()">Noch kein Account? Registrieren</p>
-        </div>
-    </div>
-
     <!-- Dashboard -->
-    <div id="dashboard" class="content hidden">
+    <div id="dashboard" class="content">
         <h1>Willkommen, <span id="user-display"></span>!</h1>
         <button class="pc-checker" onclick="runPCCheck()">PC-Checker starten</button>
         <div class="stat-container">
@@ -215,21 +162,26 @@
         </div>
     </div>
 
-    <script>
-        function submitForm() {
-            localStorage.setItem("currentUser", "User");
-            showPage("dashboard");
-            document.getElementById("user-display").innerText = "User";
-        }
+    <!-- Andere Seiten -->
+    <div id="pins" class="content hidden"><h1>Pins</h1><p>Hier sind die gespeicherten Pins.</p></div>
+    <div id="results" class="content hidden"><h1>Results</h1><p>Hier sind die Scan-Ergebnisse.</p></div>
+    <div id="strings" class="content hidden"><h1>Strings</h1><p>Hier werden Strings analysiert.</p></div>
+    <div id="downloads" class="content hidden"><h1>Downloads</h1><p>Hier können Dateien heruntergeladen werden.</p></div>
 
+    <script>
         function showPage(page) {
             document.querySelectorAll(".content").forEach(el => el.classList.add("hidden"));
             document.getElementById(page).classList.remove("hidden");
+
+            document.querySelectorAll(".sidebar ul li a").forEach(link => {
+                link.classList.remove("active");
+            });
+            document.getElementById("nav-" + page).classList.add("active");
         }
 
         function logout() {
-            localStorage.removeItem("currentUser");
-            showPage("auth-container");
+            alert("Du wurdest ausgeloggt!");
+            showPage("dashboard");
         }
 
         function runPCCheck() {
